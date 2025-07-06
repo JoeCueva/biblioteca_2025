@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario Usuario</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background-color: #2e2e2e;
+      font-family: 'Segoe UI', sans-serif;
+      color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 15px;
+    }
+
+    .form-container {
+      background-color: #3a3a3a;
+      max-width: 850px;
+      width: 100%;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container h2 {
+      font-weight: bold;
+      color: #f0963a;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-control {
+      background-color: #444;
+      color: #f1f1f1;
+      border: none;
+    }
+
+    .form-control::placeholder {
+      color: #aaa;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #ddd;
+    }
+
+    .form-control[readonly] {
+      background-color: #555;
+      color: #ccc;
+    }
+
+    .btn-group-custom {
+      text-align: right;
+      margin-top: 25px;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: #f0963a;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #e67e22;
+    }
+
+    footer {
+      background-color: #1f1f1f;
+      color: #bbb;
+      text-align: center;
+      padding: 15px 0;
+      border-top: 1px solid #444;
+    }
+
+    footer span {
+      color: #f0963a;
+    }
+
+    @media (max-width: 576px) {
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      .btn-group-custom {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<main>
+  <div class="form-container">
+    <h2><i class="bi bi-person-plus-fill"></i> Registro de Usuario</h2>
+
+    <form th:action="${type} == 'N' ? @{/save-new-usuario} : @{/save-edit-usuario}" th:object="${usuario}" method="post">
+      <div class="row g-3">
+
+        <!-- Código -->
+        <div class="col-md-4">
+          <label class="form-label">Código</label>
+          <input type="text" class="form-control" readonly th:field="*{id_usuario}">
+        </div>
+
+        <!-- Nombre -->
+        <div class="col-md-4">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" placeholder="Ej: Juan" th:field="*{nombre_usuario}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- Apellido -->
+        <div class="col-md-4">
+          <label class="form-label">Apellido</label>
+          <input type="text" class="form-control" placeholder="Ej: Pérez" th:field="*{apellido_usuario}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- DNI -->
+        <div class="col-md-4">
+          <label class="form-label">DNI</label>
+          <input type="text" class="form-control" placeholder="Ej: 12345678" th:field="*{dni}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- Correo -->
+        <div class="col-md-8">
+          <label class="form-label">Correo</label>
+          <input type="email" class="form-control" placeholder="Ej: ejemplo@gmail.com" th:field="*{correo}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- Teléfono -->
+        <div class="col-md-4">
+          <label class="form-label">Teléfono</label>
+          <input type="text" class="form-control" placeholder="Ej: 987654321" th:field="*{telefono}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- Dirección -->
+        <div class="col-md-8">
+          <label class="form-label">Dirección</label>
+          <input type="text" class="form-control" placeholder="Ej: Av. Los Álamos 123" th:field="*{direccion}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- Género -->
+        <div class="col-md-6">
+          <label class="form-label">Género</label>
+          <input type="text" class="form-control" placeholder="Ej: Masculino/Femenino" th:field="*{genero}" th:readonly="${type.equals('V')}">
+        </div>
+
+        <!-- Fecha Nacimiento -->
+        <div class="col-md-6">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input type="date" class="form-control" th:field="*{fecha_nacimiento}" th:readonly="${type.equals('V')}">
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="btn-group-custom">
+        <button type="submit" class="btn btn-success" th:if="${type != 'V'}">
+          <i class="bi bi-check-circle"></i> Guardar
+        </button>
+        <a th:href="@{/RegistroUsuario-list}" class="btn btn-primary">
+          <i class="bi bi-arrow-left-circle"></i> Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <small>&copy; 2025 Biblioteca Digital. Todos los derechos reservados. | Desarrollado por <span>Joe Cueva</span></small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

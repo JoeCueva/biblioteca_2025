@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Inventarios de Préstamos</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css"/>
+
+  <style>
+    body {
+      background-color: #2e2e2e;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    h1 {
+      color: #f0963a;
+      font-weight: bold;
+    }
+
+    .card {
+      background-color: #3a3a3a;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      background-color: #2e2e2e;
+      color: #f1f1f1;
+      border-bottom: 1px solid #444;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    .card-header h5 i {
+      color: #f0963a;
+    }
+
+    .btn-naranja {
+      background-color: #f0963a;
+      color: white;
+      border: none;
+    }
+
+    .btn-naranja:hover {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    .table {
+      background-color: #444;
+      color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table thead {
+      background-color: #f0963a;
+      color: white;
+    }
+
+    .table tbody tr:hover {
+      background-color: #545454;
+    }
+
+    .btn-outline-crud {
+      color: #f0963a;
+      border-color: #f0963a;
+    }
+
+    .btn-outline-crud:hover {
+      background-color: #f0963a;
+      color: white;
+    }
+
+    .dataTables_filter label {
+      color: #f0963a;
+    }
+
+    footer {
+      background-color: #1f1f1f;
+      color: #bbb;
+      border-top: 1px solid #444;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+    }
+
+    footer span {
+      color: #f0963a;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container my-5">
+  <h1 class="text-center mb-4">
+    <i class="bi bi-collection"></i> Inventarios de Préstamos Registrados
+  </h1>
+
+  <div class="card shadow-lg rounded">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><i class="bi bi-journals"></i> Listado de Préstamos</h5>
+      <a th:href="@{/new-prestamos}" class="btn btn-sm btn-naranja">
+        <i class="bi bi-plus-circle"></i> Nuevo Préstamo
+      </a>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table id="tablaPrestamos" class="table table-hover table-bordered table-sm align-middle">
+        <thead class="text-center">
+          <tr>
+            <th>Cód.</th>
+            <th>Usuario</th>
+            <th>Libro</th>
+            <th>Fecha del Préstamo</th>
+            <th>Fecha Devolución</th>
+            <th>Fecha Máxima de Entrega</th>
+            <th>Multa</th>
+            <th>Estado del Libro</th>
+            <th>Comentarios</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="prestamos : ${prestamosList}">
+            <td th:text="${prestamos.id_prestamos}" class="text-center"></td>
+            <td th:text="${prestamos.usuario != null ? prestamos.usuario.nombre_usuario : 'Sin usuario'}"></td>
+            <td th:text="${prestamos.libros != null ? prestamos.libros.titulo : 'Sin libro'}"></td>
+            <td th:text="${prestamos.fecha_prestamo}"></td>
+            <td th:text="${prestamos.fecha_devolucion}"></td>
+            <td th:text="${prestamos.fecha_real}"></td>
+            <td th:text="${prestamos.multa}"></td>
+            <td th:text="${prestamos.estadoLibro != null ? prestamos.estadoLibro.descripcion : 'Sin estado'}"></td>
+            <td th:text="${prestamos.comentarios}"></td>
+            <td class="text-center">
+              <div class="btn-group" role="group">
+                <a th:href="@{/edit-prestamos/{id}(id=${prestamos.id_prestamos})}" class="btn btn-outline-crud btn-sm" title="Editar">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <a th:href="@{/view-prestamos/{id}(id=${prestamos.id_prestamos})}" class="btn btn-outline-crud btn-sm" title="Ver">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <a th:href="@{/remove-prestamos/{id}(id=${prestamos.id_prestamos})}" class="btn btn-outline-crud btn-sm" title="Eliminar">
+                  <i class="bi bi-trash"></i>
+                </a>
+                <a th:href="@{/viewMas-prestamos/{id}(id=${prestamos.id_prestamos})}" class="btn btn-outline-crud btn-sm" title="Ver más Datos">
+                  <i class="bi bi-card-list"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mt-3 text-end">
+        <a th:href="@{/bienvenido}" class="btn btn-naranja btn-sm">
+          <i class="bi bi-arrow-left-circle"></i> Regresar al Menú
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <small>&copy; 2025 Biblioteca Digital. Todos los derechos reservados. | Desarrollado por <span>Joe Cueva</span></small>
+  </div>
+</footer>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#tablaPrestamos').DataTable({
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json',
+        search: "_INPUT_",
+        searchPlaceholder: "🔍 Buscar préstamos..."
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

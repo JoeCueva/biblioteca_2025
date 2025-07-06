@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Categorías de Libros</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #2e2e2e;
+      font-family: 'Segoe UI', sans-serif;
+      color: #f1f1f1;
+    }
+
+    h1 {
+      color: #f0963a;
+      font-weight: bold;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .table-container {
+      margin: 40px auto;
+      padding: 30px;
+      background-color: rgba(59, 59, 59, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
+    }
+
+    .table-responsive {
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .table {
+      width: 100%;
+      margin-bottom: 0;
+      background-color: #383838;
+      color: #ddd;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .table thead {
+      background: linear-gradient(to right, #f0963a, #e67e22);
+      color: white;
+    }
+
+    .table thead th {
+      border-top: none;
+      font-weight: bold;
+      padding: 0.9rem;
+      text-align: center;
+    }
+
+    .table tbody tr {
+      transition: background-color 0.3s ease;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #3f3f3f;
+    }
+
+    .table tbody tr:nth-child(odd) {
+      background-color: #464646;
+    }
+
+    .table tbody tr:hover {
+      background-color: #545454;
+    }
+
+    .table td {
+      padding: 0.9rem;
+      text-align: center;
+      border: none;
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .btn-sm {
+      border-radius: 12px;
+      padding: 6px 12px;
+    }
+
+    .btn-success, .btn-warning, .btn-danger, .btn-primary {
+      color: #fff;
+      border: none;
+    }
+
+    .btn-success:hover,
+    .btn-warning:hover,
+    .btn-danger:hover,
+    .btn-primary:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    .btn-primary {
+      background-color: #f0963a;
+    }
+
+    .btn-primary:hover {
+      background-color: #e67e22;
+    }
+
+    .filter-box {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .filter-box input {
+      padding-left: 40px;
+      background-color: #ececec;
+      border-radius: 12px;
+      border: none;
+      color: #000;
+      height: 38px;
+    }
+
+    .filter-box::before {
+      content: "\F52A";
+      font-family: "bootstrap-icons";
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      font-size: 20px;
+      color: #888;
+    }
+
+    .btn-nueva {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .btn-nueva {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .table thead {
+        font-size: 0.9rem;
+      }
+
+      .table-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1><i class="bi bi-journal-bookmark-fill me-2"></i> Categorías de Libros</h1>
+
+  <div class="container table-container">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h4 class="text-light mb-3 mb-md-0">
+        <i class="bi bi-list-columns-reverse me-2 text-warning"></i>Listado de Categorías
+      </h4>
+      <a th:href="@{/new-categoria}" class="btn btn-success btn-icon btn-nueva">
+        <i class="bi bi-plus-circle-fill"></i> Nueva Categoría
+      </a>
+    </div>
+
+    <div class="filter-box">
+      <input type="text" id="filtro" class="form-control" placeholder="Buscar por nombre de categoría...">
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle" id="tablaCategorias">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nombre de Categoría</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="categoria : ${categoriaList}">
+            <td th:text="${categoria.id_categoria}"></td>
+            <td th:text="${categoria.nombreCategoria}"></td>
+            <td>
+              <a th:href="@{/edit-categoria/{id}(id=${categoria.id_categoria})}" class="btn btn-warning btn-sm btn-icon" title="Editar">
+                <i class="bi bi-pencil-square"></i> Editar
+              </a>
+              <a th:href="@{/remove-categoria/{id}(id=${categoria.id_categoria})}" class="btn btn-danger btn-sm btn-icon" title="Eliminar">
+                <i class="bi bi-trash-fill"></i> Eliminar
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4">
+      <a th:href="@{/bienvenido}" class="btn btn-primary btn-icon">
+        <i class="bi bi-arrow-left-circle"></i> Regresar al Menú
+      </a>
+    </div>
+  </div>
+
+  <!-- Filtro dinámico -->
+  <script>
+    document.getElementById('filtro').addEventListener('keyup', function () {
+      const valor = this.value.toLowerCase();
+      const filas = document.querySelectorAll('#tablaCategorias tbody tr');
+      filas.forEach(fila => {
+        const texto = fila.children[1].textContent.toLowerCase();
+        fila.style.display = texto.includes(valor) ? '' : 'none';
+      });
+    });
+  </script>
+  
+<footer class="text-center py-3 mt-5" style="background-color: #1f1f1f; color: #bbb; border-top: 1px solid #444;">
+  <div class="container">
+    <small>&copy; 2025 Biblioteca Digital. Todos los derechos reservados. | Desarrollado por <span style="color: #f0963a;">Joe Cueva</span></small>
+  </div>
+</footer>
+
+</body>
+</html>
